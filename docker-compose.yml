@@ -1,0 +1,30 @@
+services:
+  postgres-db:
+    image: postgres:18-alpine
+    container_name: book-network-db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      - bsn_network
+    restart: unless-stopped
+
+  maildev:
+    image: maildev/maildev:2.1.0
+    container_name: book-network-maildev
+    ports:
+      - "${MAIL_SMTP_PORT}:1025"
+      - "${MAIL_UI_PORT}:1080"
+    restart: always
+
+volumes:
+  pgdata:
+    driver: local
+networks:
+  bsn_network:
+    driver: bridge

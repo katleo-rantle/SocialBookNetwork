@@ -43,6 +43,7 @@ Thumbs.db
 .env
 .env.local
 *.properties.local
+.env.*
 
 
 # Front-end / Node dependencies
