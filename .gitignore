@@ -1,0 +1,50 @@
+# ==========================================
+# 1. Build Artifacts (Maven)
+# ==========================================
+**/target/
+**/target/**
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# ==========================================
+# 2. IDE Specific Files (IntelliJ IDEA)
+# ==========================================
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+gen/
+
+# ==========================================
+# 3. Crash logs and runtime caches
+# ==========================================
+*.log
+*.log.*
+**/logs/
+.sts4-cache/
+.springBeans/
+
+# ==========================================
+# 4. Operating System Files
+# ==========================================
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# 5. Environment Variables & Secrets (CRITICAL)
+# ==========================================
+.env
+.env.local
+*.properties.local
+
+
+# Front-end / Node dependencies
+**/node_modules/
+**/.pnpm-store/
