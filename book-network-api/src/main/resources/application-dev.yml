@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhostL:5432/book_network
+    url: jdbc:postgresql://localhost:5432/book_network
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -33,3 +33,13 @@ application:
     jwt:
       secret-key: search-for-secret-key-generators-online
       expiration: 86400000
+    cors:
+      allowed-origins:
+        - "http://localhost:3000" # Hoppscotch Local UI
+        - "http://localhost:4200" # Frontend Angular/React app
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+
+server:
+  port: 8088

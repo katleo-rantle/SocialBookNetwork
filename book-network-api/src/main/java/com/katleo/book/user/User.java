@@ -76,7 +76,7 @@ public class User implements UserDetails, Principal {
     public String getUsername() {
         return email;
     }
-    private String fullName(){
+    public String fullName(){
         return firstName + " " + lastName;
     }
 }

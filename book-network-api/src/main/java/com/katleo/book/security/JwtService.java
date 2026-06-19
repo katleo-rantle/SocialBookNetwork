@@ -4,6 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +19,18 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-@ConfigurationProperties(prefix = "application.security.jwt")
 public class JwtService {
 
-    private Long jwtExpiration;
-    private String secretKey;
+    private final ApplicationSecurityProperties securityProperties;
+    private final Long jwtExpiration;
+    private final String secretKey;
+
+    public JwtService(ApplicationSecurityProperties securityProperties){
+        this.securityProperties = securityProperties;
+
+        this.secretKey = securityProperties.getJwt().getSecretKey();
+        this.jwtExpiration = securityProperties.getJwt().getJwtExpiration();
+    }
 
     public String generateToken(UserDetails userDetails){
         return generateToken(new HashMap<>(), userDetails);

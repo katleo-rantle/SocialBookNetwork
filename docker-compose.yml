@@ -2,6 +2,8 @@ services:
   postgres-db:
     image: postgres:18-alpine
     container_name: book-network-db
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -20,7 +22,19 @@ services:
     ports:
       - "${MAIL_SMTP_PORT}:1025"
       - "${MAIL_UI_PORT}:1080"
+    networks:
+      - bsn_network
     restart: always
+
+  hoppscotch:
+    image: hoppscotch/hoppscotch:2026.5.0
+    container_name: book-network-hoppscotch
+    ports:
+      - "${HOPPSCOTCH_PORT}:3000"
+    networks:
+      - bsn_network
+    restart: unless-stopped
+
 
 volumes:
   pgdata:

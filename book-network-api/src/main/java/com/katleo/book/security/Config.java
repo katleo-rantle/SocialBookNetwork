@@ -10,26 +10,44 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class Config {
 
     private final AuthenticationProvider authenticationProvider;
     private final JwtFilter jwtAuthFilter;
 
+    private final ApplicationSecurityProperties securityProperties;
+    private final List<String> allowedOrigins;
+
+    public Config(ApplicationSecurityProperties securityProperties,
+                  JwtFilter jwtAuthFilter,
+                  AuthenticationProvider authenticationProvider){
+        this.securityProperties = securityProperties;
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.authenticationProvider = authenticationProvider;
+
+        this.allowedOrigins = securityProperties.getCors().getAllowedOrigins();
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.
-                cors(withDefaults())
+        http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers(
+                        req
+                                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers(
                                         "/auth/**",
                                         "/v2/api-docs",
                                         "/v3/api-docs",
@@ -40,8 +58,7 @@ public class Config {
                                         "/configuration/security",
                                         "/swagger-ui/**",
                                         "/webjars/**",
-                                        "/swagger-ui.html"
-                        ).permitAll()
+                                        "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

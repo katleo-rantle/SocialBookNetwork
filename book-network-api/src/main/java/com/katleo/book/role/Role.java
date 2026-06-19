@@ -1,5 +1,6 @@
 package com.katleo.book.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.katleo.book.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,19 +17,25 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Role {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(unique = true)
     private String name;
 
+
+//    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
+
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
